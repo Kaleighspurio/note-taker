@@ -1,6 +1,7 @@
 // require express
 const router = require('express').Router();
 // require the class file notbooks so you can use the functions
+const Notebook = require('../db/notebook');
 
 // get request for /api/notes
 // call the getNotes() from the class that you required
