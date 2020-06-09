@@ -12,3 +12,5 @@ const router = require('express').Router();
 
 // delete request for /api/notes/:id
 // call the deleteNote() function
+
+module.exports = router;
