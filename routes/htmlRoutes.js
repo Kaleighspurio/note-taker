@@ -6,7 +6,7 @@ router.get('/notes', (req, res) => {
     res.sendFile(filePath);
 })
 
-router.get('*', (req, res) => {
+router.get('/', (req, res) => {
     const filePath = path.join(__dirname, '..', 'public', 'index.html');
     res.sendFile(filePath);
 })
