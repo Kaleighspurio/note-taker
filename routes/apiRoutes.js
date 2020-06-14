@@ -11,35 +11,30 @@ router.get("/notes", (req, res) => {
     if (err) {
       throw err;
     }
-    res.json(data);
+    // response the parsed json data from the db.json file.
+    res.json(JSON.parse(data));
   });
-  //   res.sendFile(datafile);
-  //   res.json(note)
 });
 
 // post request for /api/notes
 router.post("/notes", (req, res) => {
-  //   console.log(req.body);
-  const noteData = [];
-  //   fs.readFileSync(datafile, (err, data) => {
-  //       if (err){
-  //           throw err;
-  //       }
-  //       console.log(data, "this is the console log in the read file");
-  //     //  noteData.push(data);
-  //   })
-
+    // read the json file that already exists
   const readFile = fs.readFileSync(datafile, "utf8");
   console.log(readFile, "this is the console to look for");
+//   parse the data from the db.json file
   const parsedFile = JSON.parse(readFile);
   console.log(parsedFile, "this is hopefully a parsed file");
-  noteData.push(readFile);
+//   create the new note
   let newNote = req.body;
+//   set the id of the new note to a random number
   newNote.id = Math.floor(Math.random() * 100001);
+//   push the new note to the parsed json array that was read
   parsedFile.push(newNote);
   console.log(parsedFile, "this is the log after the push");
+//   stringify all of the notes
   const stringNotes = JSON.stringify(parsedFile);
   console.log(stringNotes, "These should be all the notes in string form");
+//   add the stringified notes to the db.json
   const addNotes = () => {
     fs.writeFile(datafile, stringNotes, (err) => {
       if (err) throw err;
