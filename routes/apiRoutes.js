@@ -3,7 +3,6 @@ const Notes = require("../db/notes");
 const fs = require("fs");
 const path = require("path");
 const datafile = path.join(__dirname, "../db/db.json");
-const noteData = [];
 
 // get request for /api/notes
 router.get("/notes", (req, res) => {
@@ -44,13 +43,38 @@ router.post("/notes", (req, res) => {
   addNotes();
   res.json(stringNotes);
 });
-// call the addNotes() from the class that you required
-// res.json(note)
+
 
 router.delete("/notes/:id", (req, res) => {
-  Notes.deleteNote(res);
+    // read the db.json file and parse it
+    fs.readFile(datafile, "utf-8", (err, data) => {
+        if (err) {
+          throw err;
+        }
+        const parsedData = JSON.parse(data);
+        // set the id of the note that was clicked to a variable
+        let clickedID = req.params.id;
+        console.log(clickedID, 'this is the clicked id');
+        // for each note in the json array, if the note's id matches the clickedID then find the index of that note in the array and remove that note using .splice
+        parsedData.forEach((note) => {
+            console.log(note.id);
+            if (note.id == clickedID){
+                console.log(`${clickedID} matches ${note.id}`);
+                const noteIndex = parsedData.indexOf(note);
+                console.log(noteIndex);
+                parsedData.splice(noteIndex, 1);
+            } 
+        });
+        console.log(parsedData, 'hopefully this has one less item...');
+        // Rewrite the db.json file with the new array that the note was removed from
+        fs.writeFileSync(datafile, JSON.stringify(parsedData), (err) => {
+            if (err){
+                throw err;
+            }
+            console.log("note has been removed")
+        });
+        res.json(JSON.stringify(parsedData));
+      });
 });
-// delete request for /api/notes/:id
-// call the deleteNote() function
 
 module.exports = router;
